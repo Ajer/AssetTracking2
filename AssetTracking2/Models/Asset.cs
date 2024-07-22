@@ -8,12 +8,35 @@
 //using System.Threading;
 //using System.Threading.Tasks;
 
+using System.ComponentModel.DataAnnotations;
+
 namespace AssetTracking2.Models
 {
     public class Asset
     {
-        public Asset(int id,string type, string brand, DateTime purchaseDate, string model, double priceInDollar,
-            double localPrice)
+        
+        public int Id { get; set; }
+
+        
+        public string Type { get; set; }
+
+       
+        public string? Brand { get; set; }
+
+        public DateTime? PurchaseDate { get; set; }
+
+       
+        public string? Model { get; set; }
+
+        public double? PriceInDollar { get; set; }
+
+        public double? LocalPrice { get; set; }
+
+        //public Office Office { get; set; }
+
+
+        public Asset(int id, string type, string? brand, DateTime? purchaseDate, string? model, double? priceInDollar,
+            double? localPrice)
         {
             Id = id;
             Type = type;
@@ -22,23 +45,9 @@ namespace AssetTracking2.Models
             Model = model;
             PriceInDollar = priceInDollar;
             LocalPrice = localPrice;
+
             // Office = office;
         }
-        public int Id { get; set; }
-
-        public string Type { get; set; }
-
-        public string Brand { get; set; }
-
-        public DateTime PurchaseDate { get; set; }
-
-        public string Model { get; set; }
-
-        public double PriceInDollar { get; set; }
-
-        public double LocalPrice { get; set; }
-
-        //public Office Office { get; set; }
 
     }
 }

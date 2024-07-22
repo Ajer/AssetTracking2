@@ -657,7 +657,7 @@ namespace AssetTracking2
                 int cmpTime = 10;    //  days
                 foreach (var asset in assets) // Show List
                 {
-                    string dt = asset.PurchaseDate.ToString("yyyy-MM-dd");
+                    string dt = asset.PurchaseDate.ToString();  // ("yyyy-MM-dd");
                    // string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
 
                     //int t1 = GetTimeSpanInDays(task.DueDate);
