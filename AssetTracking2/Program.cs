@@ -24,7 +24,7 @@ void Main()
             //if (sort != "q")
             //{
 
-             //lu.PrintAllAssets();
+             lu.PrintAllAssets();
             //}
         }
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Asset

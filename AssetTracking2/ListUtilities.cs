@@ -1,4 +1,5 @@
 ﻿using AssetTracking2.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
@@ -18,17 +19,17 @@ namespace AssetTracking2
     public class ListUtilities
     {
 
-        //public TaskRepository TaskRepository { get; set; }
+        public AssetRepository AssetRepo { get; set; }
 
 
         //public List<Project> Projects { get; set; }
 
 
-        //public ListUtilities(TaskRepository tr)
-        //{
+        public ListUtilities()
+        {
 
-        //    TaskRepository = tr;
-        //}
+            AssetRepo = new AssetRepository();
+        }
 
 
         // HelpClass which let the user input an answer-string to a question
@@ -607,16 +608,15 @@ namespace AssetTracking2
 
 
         // Writes the headers for the different task-params
-        private void ListHeader(string sort)
+        private void ListHeader(string sort="")
         {
             string typeString = "Type";
-            //string projString = "Project";
-            string purchasedString = "Purchased Date";
-            //string statusString = "Status";
             string brandString = "Brand";
             string modelString = "Model";
             string priceDollarString = "Price dollar";
-            string localPriceString = "Local Price";
+            //string localPriceString = "Local Price";
+            string purchasedString = "Purchased Date";
+
 
             //if (sort == "p")
             //{
@@ -636,45 +636,37 @@ namespace AssetTracking2
             //}
 
             Console.WriteLine();
-            Console.WriteLine("Id".PadRight(7) + typeString.PadRight(25) + brandString.PadRight(23) + modelString.ToString().PadRight(15) + priceDollarString.ToString().PadRight(10) +
-                localPriceString.PadRight(10) + purchasedString.PadRight(10));
+            Console.WriteLine("Id".PadRight(7) + typeString.PadRight(10) + brandString.PadRight(23) + modelString.ToString().PadRight(23) + priceDollarString.ToString().PadRight(15) +
+                purchasedString);
             
-            Console.WriteLine("---".PadRight(7) + "----".PadRight(25) + "-------".PadRight(23) + "------".ToString().PadRight(15) + "-------".ToString().PadRight(10) +
-                "---------------".PadRight(10) + "-------------".PadRight(10));
+            Console.WriteLine("---".PadRight(7) + "----".PadRight(10) + "-------".PadRight(23) + "------".ToString().PadRight(23) + "-------".ToString().PadRight(15) +
+                "-------------");
         }
 
 
-        // Prints the List according to the sort
-        public void PrintAllAssets(List<Asset> assets, string sort)
+       
+        //public void PrintAllAssets(string sort)
+
+        public async void PrintAllAssets()
         {
 
             //List<ProjectTask> sorted = GetSortedTasks(tasks, sort);
 
-            //ListHeader(sort);        // show the sort-method by quotation-mark
+            
+            List<Asset> assets = await AssetRepo.GetAllAssets();
 
-            if (assets.Count() > 0)
+            ListHeader();        // show the sort-method by quotation-mark
+
+            if (assets.Any())
             {
-                int cmpTime = 10;    //  days
-                foreach (var asset in assets) // Show List
+                //int cmpTime = 10;    //  days
+                foreach (var asset in assets.ToList()) // Show List
                 {
-                    string dt = asset.PurchaseDate.ToString();  // ("yyyy-MM-dd");
-                   // string status = (task.Status == TaskStatus.NotStarted) ? "Not Started" : task.Status.ToString();
-
-                    //int t1 = GetTimeSpanInDays(task.DueDate);
-
-                    //if (t1 <= 10 && t1 >= 0)   // tasks within 10 days before duedate (incl duedate) become red. "Red window of dates" 
-                    //{                           // Older and Younger tasks remain white. 
-                    //    Console.ForegroundColor = ConsoleColor.Red;
-                    //}
-
-                    //if (task.Status == TaskStatus.Done)
-                    //{
-                    //    Console.ForegroundColor = ConsoleColor.Green;
-                    //}
-
+                    // string dt = asset.PurchaseDate.ToString();  // ("yyyy-MM-dd");
+                  
 
                     Console.WriteLine(asset.Id.ToString().PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(23) + asset.Model.PadRight(23) + asset.PriceInDollar.ToString().PadRight(15) 
-                     + dt);
+                     + asset.PurchaseDate.ToString());
 
                     Console.ResetColor();
                 }
