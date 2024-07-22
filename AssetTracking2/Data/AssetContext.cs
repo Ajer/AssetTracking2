@@ -26,6 +26,46 @@ namespace AssetTracking2.Data
                 .HasDiscriminator(a => a.Type);
 
             base.OnModelCreating(modelBuilder);
+
+            var assets = new List<Asset>
+            {
+                new Asset{
+                    Id=1,
+                    Type="Computer",
+                    Brand = "Dell",
+                    PurchaseDate = new DateTime(2024,7,1),
+                    Model = "XPS",
+                    PriceInDollar = 524 
+                },
+                new Asset{
+                    Id=3,
+                    Type="Phone",
+                    Brand = "Iphone",
+                    PurchaseDate = new DateTime(2024,6,15),
+                    Model = "8",
+                    PriceInDollar = 524
+                },
+                new Asset{
+                    Id=2,
+                    Type="Computer",
+                    Brand = "MacBook",
+                    PurchaseDate = new DateTime(2023,5,30),
+                    Model = "Air",
+                    PriceInDollar = 524
+                },
+
+                new Asset{
+                    Id=4,
+                    Type="Phone",
+                    Brand = "Samsung",
+                    PurchaseDate = new DateTime(2023,10,12),
+                    Model = "fold",
+                    PriceInDollar = 524
+                }
+
+            };
+
+            modelBuilder.Entity<Asset>().HasData(assets);
         }
 
         public DbSet<Asset> Assets { get; set; }

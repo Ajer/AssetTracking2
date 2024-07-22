@@ -4,6 +4,7 @@ using AssetTracking2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetTracking2.Migrations
 {
     [DbContext(typeof(AssetContext))]
-    partial class AssetContextModelSnapshot : ModelSnapshot
+    [Migration("20240722101444_seed_2")]
+    partial class seed_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,29 +71,29 @@ namespace AssetTracking2.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            Brand = "Iphone",
-                            Model = "8",
-                            PriceInDollar = 524.0,
-                            PurchaseDate = new DateTime(2024, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Type = "Phone"
-                        },
-                        new
-                        {
                             Id = 2,
                             Brand = "MacBook",
                             Model = "Air",
-                            PriceInDollar = 524.0,
+                            PriceInDollar = 1024.0,
                             PurchaseDate = new DateTime(2023, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Type = "Computer"
                         },
                         new
                         {
+                            Id = 3,
+                            Brand = "Iphone",
+                            Model = "8",
+                            PriceInDollar = 294.0,
+                            PurchaseDate = new DateTime(2024, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Type = "Phone"
+                        },
+                        new
+                        {
                             Id = 4,
                             Brand = "Samsung",
-                            Model = "fold",
-                            PriceInDollar = 524.0,
-                            PurchaseDate = new DateTime(2023, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Model = "fold-z",
+                            PriceInDollar = 294.0,
+                            PurchaseDate = new DateTime(2024, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Type = "Phone"
                         });
                 });

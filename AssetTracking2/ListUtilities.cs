@@ -645,7 +645,7 @@ namespace AssetTracking2
 
 
         // Prints the List according to the sort
-        public void PrintAllTasks(List<Asset> assets, string sort)
+        public void PrintAllAssets(List<Asset> assets, string sort)
         {
 
             //List<ProjectTask> sorted = GetSortedTasks(tasks, sort);
@@ -673,8 +673,8 @@ namespace AssetTracking2
                     //}
 
 
-                    Console.WriteLine(asset.Id.ToString().PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(23) + asset.Model.PadRight(23) + asset.PriceInDollar.ToString().PadRight(15) +
-                     asset.LocalPrice.ToString().PadRight(10) + dt);
+                    Console.WriteLine(asset.Id.ToString().PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(23) + asset.Model.PadRight(23) + asset.PriceInDollar.ToString().PadRight(15) 
+                     + dt);
 
                     Console.ResetColor();
                 }

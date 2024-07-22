@@ -17,37 +17,40 @@ namespace AssetTracking2.Models
         
         public int Id { get; set; }
 
-        
+
+        [Required,MaxLength(10)]
         public string Type { get; set; }
 
-       
+
+        [MaxLength(50)]
         public string? Brand { get; set; }
 
+        [MaxLength(50)]
         public DateTime? PurchaseDate { get; set; }
 
-       
+        [MaxLength(50)]
         public string? Model { get; set; }
 
         public double? PriceInDollar { get; set; }
 
-        public double? LocalPrice { get; set; }
+        // public double? LocalPrice { get; set; }
 
-        //public Office Office { get; set; }
+        // public Office Office { get; set; }
 
 
-        public Asset(int id, string type, string? brand, DateTime? purchaseDate, string? model, double? priceInDollar,
-            double? localPrice)
-        {
-            Id = id;
-            Type = type;
-            Brand = brand;
-            PurchaseDate = purchaseDate;
-            Model = model;
-            PriceInDollar = priceInDollar;
-            LocalPrice = localPrice;
+        //public Asset(int id, string type, string? brand, DateTime? purchaseDate, string? model, double? priceInDollar)
+        //{
+        //    Id = id;
+        //    Type = type;
+        //    Brand = brand;
+        //    PurchaseDate = purchaseDate;
+        //    Model = model;
+        //    PriceInDollar = priceInDollar;
+            
+        //    //LocalPrice = localPrice;
 
-            // Office = office;
-        }
+        //    // Office = office;
+        //}
 
     }
 }
