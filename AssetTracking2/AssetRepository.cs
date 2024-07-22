@@ -17,10 +17,46 @@ namespace AssetTracking2
             using (var context = new AssetContext())
             {
                 list = context.Assets.ToList();
-            }     
+            }
             return list;
         }
 
+        public bool CreateComputer(Computer c)
+        {
+            bool createOk = false;
+            using (var context = new AssetContext())
+            {
+                try
+                {
+                    context.Computers.Add(c);
+                    context.SaveChanges();
+                    createOk = true;
+                }
+                catch (Exception)
+                {
+                    createOk = false;
+                }          
+            }
+            return createOk;
+        }
 
+        public bool CreatePhone(Phone p)
+        {
+            bool createOk = false;
+            using (var context = new AssetContext())
+            {
+                try
+                {
+                    context.Phones.Add(p);
+                    context.SaveChanges();
+                    createOk = true;
+                }
+                catch (Exception)
+                {
+                    createOk = false;
+                }
+            }
+            return createOk;
+        }
     }
 }

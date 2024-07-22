@@ -30,7 +30,7 @@ void Main()
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Asset
         {
             lu.UserChoiceHeader("Add a new Asset");
-           // lu.AddAsset();
+            lu.AddAsset();
 
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)

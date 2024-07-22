@@ -291,55 +291,70 @@ namespace AssetTracking2
 
 
         // Start method accessible from program-class for adding a new task.
-        public void AddAsset(List<Asset> assets)
+        public void AddAsset()
         {
-            ReadAllDataForAddAsset(assets);
+            ReadAllDataForAddAsset();
         }
 
 
 
-        // Reads user input for a task: title, projectname, duedate
-        // Status will be set to 'NotStarted'
-        private void ReadAllDataForAddAsset(List<Asset> assets)
+        // Reads user input for an Asset: type,brand,purchasedDate       
+        private void ReadAllDataForAddAsset()
         {
 
-            string dataTitle = "";
-            string dataProjName = "";
-            //string dataStatus = "";      // Initiate to TaskStatus.NotStarted
-            string dataDueDate = "";
+            string dataType = "";
+            string dataBrandName = "";
+            string dataModelName = "";
+            string dataPurchasedDate = "";
+            string dataPrice = "";
+            
+            //string dataOfficeCountry = "";
 
 
             while (true)
             {
-                bool dataTitleOk = false;
+                bool typeOk = false;
 
-                Console.WriteLine();
-                //Console.WriteLine("Write q to quit");
-                QuitCue();
+                Console.WriteLine();               
+                QuitCue();   //Console.WriteLine("Write q to quit");
 
-                while (!dataTitleOk)
+                while (!typeOk)
                 {
-                    dataTitle = ReadDataFromUser("Enter a Task Title");
-                    if (dataTitle != "")  // either "q" or other not empty data makes user break out of this loop
+                    dataType = ReadDataFromUser("Enter a Type ('Computer' or 'Phone'). Write q to quit");
+                    if (dataType.Trim().ToLower() == "computer" || dataType.Trim().ToLower() == "phone" || dataType.Trim().ToLower() == "q")
                     {
-                        dataTitleOk = true;
+                        typeOk = true;
                     }
                 }
-                if (dataTitle.ToLower() == "q")
+                if (dataType.ToLower() == "q")
                 {
                     break;
                 }
 
-                bool projNameOk = false;
-                while (!projNameOk)
+                bool brandNameOk = false;
+                while (!brandNameOk)
                 {
-                    dataProjName = ReadDataFromUser("Enter a Project Name");
-                    if (dataProjName != "")
+                    dataBrandName = ReadDataFromUser("Enter a Brand Name. Write q to quit");
+                    if (dataBrandName != "")
                     {
-                        projNameOk = true;
+                        brandNameOk = true;
                     }
                 }
-                if (dataProjName.ToLower() == "q")
+                if (dataBrandName.Trim().ToLower() == "q")
+                {
+                    break;
+                }
+
+                bool modelNameOk = false;
+                while (!modelNameOk)
+                {
+                    dataModelName = ReadDataFromUser("Enter a Model Name. Write q to quit");
+                    if (dataModelName != "")
+                    {
+                        modelNameOk = true;
+                    }
+                }
+                if (dataModelName.Trim().ToLower() == "q")
                 {
                     break;
                 }
@@ -347,38 +362,87 @@ namespace AssetTracking2
                 bool dateTimeOk = false;
                 while (!dateTimeOk)
                 {
-                    dataDueDate = ReadDataFromUser("Enter a DueDate in format YYYY-MM-DD");
-                    if (ValidateDate(dataDueDate) || dataDueDate.ToLower() == "q")
+                    dataPurchasedDate = ReadDataFromUser("Enter a PurchaseDate in format YYYY-MM-DD. Write q to quit");
+                    if (ValidateDate(dataPurchasedDate.Trim()) || dataPurchasedDate.Trim().ToLower() == "q")
                     {
                         dateTimeOk = true;
                     }
                 }
-                if (dataDueDate.ToLower() == "q")
+                if (dataPurchasedDate.Trim().ToLower() == "q")
                 {
                     break;
                 }
 
+                bool priceOk = false;
+                double price = 0;
+                while (!priceOk)
+                {
+                    dataPrice = ReadDataFromUser("Enter a Price in USD.  Write q to quit");
+                    if (dataPrice != "")
+                    {
+                        try
+                        {
+                            price = Convert.ToDouble(dataPrice);
+                            priceOk = true;
+                        }
+                        catch (Exception e)  //.......
+                        {
+                            if (dataPrice.ToLower() == "q")
+                            {
+                                priceOk = true;
+                            }
+                            else
+                            {
+                                priceOk = false;
+                            }
+                        }
+                    }
+                }
+                if (dataPrice.ToLower() == "q")
+                {
+                    break;
+                }
+
+
+
                 // All datas here because no break has been performed
 
-                DateTime dueDt = Convert.ToDateTime(dataDueDate);
-
-                //Project project = new Project(dataProjName);
-
-               // mId = mId + 1;    // create new Id for task
-              //  ProjectTask t = new ProjectTask(mId, dataTitle, project, TaskStatus.NotStarted, dueDt);
-
+                DateTime purDt = Convert.ToDateTime(dataPurchasedDate);
+           
             
                 try
                 {
-                    //assets.Add();
+                    bool okStf = false;
 
-                    //write to file
-                    // bool okSttf = TaskRepository.SaveTasksToFile(tasks); // "AutoSave" when change of Task-List is made
-                    //  bool okWmi = TaskRepository.WriteMaxId(mId);    // Also update record of maxId on file since we added task. (we dont wanna reuse id's)
-                    bool okSttf = true;
-                    bool okWmi = true;
+                    if (dataType.Trim().ToLower() == "computer")
+                    {
+                        Computer c = new Computer
+                        {
+                            Type = "Computer",
+                            Brand = dataBrandName,
+                            Model = dataModelName,
+                            PriceInDollar = price,
+                            PurchaseDate = purDt
+                        };
 
-                    if (okSttf && okWmi)
+                        okStf = AssetRepo.CreateComputer(c);
+
+                    }
+                    else if (dataType.Trim().ToLower() == "phone")
+                    {
+                        Phone p = new Phone
+                        {
+                            Type = "Phone",
+                            Brand = dataBrandName,
+                            Model = dataModelName,
+                            PriceInDollar = price,
+                            PurchaseDate = purDt
+                        };
+
+                        okStf = AssetRepo.CreatePhone(p);
+                    }
+
+                    if (okStf)
                     {
                         SuccessMessage("added");
                     }
