@@ -33,9 +33,11 @@ namespace AssetTracking2.Models
 
         public double? PriceInDollar { get; set; }
 
-        // public double? LocalPrice { get; set; }
+        //public double? LocalPrice { get; set; }
 
-        // public Office Office { get; set; }
+        public int OfficeId { get; set; }
+
+        public Office Office { get; set; }     // Nav.property
 
 
         //public Asset(int id, string type, string? brand, DateTime? purchaseDate, string? model, double? priceInDollar)
@@ -46,7 +48,7 @@ namespace AssetTracking2.Models
         //    PurchaseDate = purchaseDate;
         //    Model = model;
         //    PriceInDollar = priceInDollar;
-            
+
         //    //LocalPrice = localPrice;
 
         //    // Office = office;

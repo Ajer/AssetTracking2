@@ -700,10 +700,10 @@ namespace AssetTracking2
             //}
 
             Console.WriteLine();
-            Console.WriteLine("Id".PadRight(7) + typeString.PadRight(10) + brandString.PadRight(23) + modelString.ToString().PadRight(23) + priceDollarString.ToString().PadRight(15) +
+            Console.WriteLine("Id".ToString().PadLeft(3).PadRight(7) + typeString.PadRight(10) + brandString.PadRight(23) + modelString.ToString().PadRight(23) + priceDollarString.ToString().PadRight(15) +
                 purchasedString);
             
-            Console.WriteLine("---".PadRight(7) + "----".PadRight(10) + "-------".PadRight(23) + "------".ToString().PadRight(23) + "-------".ToString().PadRight(15) +
+            Console.WriteLine("--".ToString().PadLeft(3).PadRight(7) + "----".PadRight(10) + "-------".PadRight(23) + "------".ToString().PadRight(23) + "-------".ToString().PadRight(15) +
                 "-------------");
         }
 
@@ -714,10 +714,10 @@ namespace AssetTracking2
         public async void PrintAllAssets()
         {
 
-            //List<ProjectTask> sorted = GetSortedTasks(tasks, sort);
-
-            
+              
             List<Asset> assets = await AssetRepo.GetAllAssets();
+
+            // List<Asset> sorted = GetSortedAssets(assets, sort);
 
             ListHeader();        // show the sort-method by quotation-mark
 
@@ -726,11 +726,11 @@ namespace AssetTracking2
                 //int cmpTime = 10;    //  days
                 foreach (var asset in assets.ToList()) // Show List
                 {
-                    // string dt = asset.PurchaseDate.ToString();  // ("yyyy-MM-dd");
-                  
 
-                    Console.WriteLine(asset.Id.ToString().PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(23) + asset.Model.PadRight(23) + asset.PriceInDollar.ToString().PadRight(15) 
-                     + asset.PurchaseDate.ToString());
+                    string dt = asset.PurchaseDate.Value.ToString("yyyy-MM-dd");
+                 
+                    Console.WriteLine(asset.Id.ToString().PadLeft(2).PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(23) + asset.Model.PadRight(23) + asset.PriceInDollar.ToString().PadRight(15) 
+                     + dt);
 
                     Console.ResetColor();
                 }

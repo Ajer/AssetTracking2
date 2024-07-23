@@ -26,50 +26,77 @@ namespace AssetTracking2.Data
 
             base.OnModelCreating(modelBuilder);
 
-            //var computers = new List<Computer>
-            //{
-            //    new Computer{
-            //        Id=1,
-            //        Type="Computer",
-            //        Brand = "Dell",
-            //        PurchaseDate = new DateTime(2024,7,1),
-            //        Model = "XPS",
-            //        PriceInDollar = 524
-            //    },
+            var computers = new List<Computer>
+            {
+                new Computer{
+                    Id=1,
+                    Type="Computer",
+                    Brand = "Dell",
+                    PurchaseDate = new DateTime(2024,7,1),
+                    Model = "XPS",
+                    PriceInDollar = 524,
+                    OfficeId = 1
+                },
 
-            //    new Computer{
-            //        Id=2,
-            //        Type="Computer",
-            //        Brand = "MacBook",
-            //        PurchaseDate = new DateTime(2023,5,30),
-            //        Model = "Air",
-            //        PriceInDollar = 524
-            //    },
-            //};
+                new Computer{
+                    Id=2,
+                    Type="Computer",
+                    Brand = "MacBook",
+                    PurchaseDate = new DateTime(2023,5,30),
+                    Model = "Air",
+                    PriceInDollar = 654,
+                    OfficeId = 2
+                }
+            };
 
-            //var phones = new List<Phone>
-            //{
-            //    new Phone{
-            //        Id=3,
-            //        Type="Phone",
-            //        Brand = "Iphone",
-            //        PurchaseDate = new DateTime(2024,6,15),
-            //        Model = "8",
-            //        PriceInDollar = 524
-            //    },
-            //    new Phone{
-            //        Id=4,
-            //        Type="Phone",
-            //        Brand = "Samsung",
-            //        PurchaseDate = new DateTime(2023,10,12),
-            //        Model = "fold",
-            //        PriceInDollar = 524
-            //    }
+            var phones = new List<Phone>
+            {
+                new Phone{
+                    Id=3,
+                    Type="Phone",
+                    Brand = "Iphone",
+                    PurchaseDate = new DateTime(2024,6,15),
+                    Model = "8",
+                    PriceInDollar = 298,
+                    OfficeId = 2
+                },
+                new Phone{
+                    Id=4,
+                    Type="Phone",
+                    Brand = "Samsung",
+                    PurchaseDate = new DateTime(2023,10,12),
+                    Model = "fold",
+                    PriceInDollar = 241,
+                    OfficeId = 1
+                }
 
-            //};
+            };
 
-            //modelBuilder.Entity<Computer>().HasData(computers);
-            //modelBuilder.Entity<Phone>().HasData(phones);
+            modelBuilder.Entity<Computer>().HasData(computers);
+            modelBuilder.Entity<Phone>().HasData(phones);
+
+            var offices = new List<Office>
+            {
+                new Office
+                {
+                    Id = 1,
+                    City = "Stockholm",
+                    Country = "Sweden"
+                },
+                new Office
+                {
+                    Id = 2,
+                    City = "Buffalo",
+                    Country = "USA"
+                },
+                new Office
+                {
+                    Id = 3,
+                    City = "Madrid",
+                    Country = "Spain"
+                }
+            };
+            modelBuilder.Entity<Office>().HasData(offices);
         }
 
         public DbSet<Asset> Assets { get; set; }
@@ -77,5 +104,7 @@ namespace AssetTracking2.Data
         public DbSet<Computer> Computers { get; set; }
 
         public DbSet<Phone> Phones { get; set; }
+
+        public DbSet<Office> Offices { get; set; }
     }
 }
