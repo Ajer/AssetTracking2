@@ -33,7 +33,7 @@ namespace AssetTracking2.Models
 
         public double? PriceInDollar { get; set; }
 
-        //public double? LocalPrice { get; set; }
+        public double? LocalPrice { get; set; }
 
         public int OfficeId { get; set; }
 

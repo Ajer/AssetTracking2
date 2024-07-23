@@ -4,6 +4,7 @@ using AssetTracking2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetTracking2.Migrations
 {
     [DbContext(typeof(AssetContext))]
-    partial class AssetContextModelSnapshot : ModelSnapshot
+    [Migration("20240723090039_Seed_Data_4")]
+    partial class Seed_Data_4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +36,6 @@ namespace AssetTracking2.Migrations
                     b.Property<string>("Brand")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<double?>("LocalPrice")
-                        .HasColumnType("float");
 
                     b.Property<string>("Model")
                         .HasMaxLength(50)
@@ -124,7 +124,6 @@ namespace AssetTracking2.Migrations
                         {
                             Id = 1,
                             Brand = "Dell",
-                            LocalPrice = 5633.0,
                             Model = "XPS",
                             OfficeId = 1,
                             PriceInDollar = 524.0,
@@ -135,7 +134,6 @@ namespace AssetTracking2.Migrations
                         {
                             Id = 2,
                             Brand = "MacBook",
-                            LocalPrice = 654.0,
                             Model = "Air",
                             OfficeId = 2,
                             PriceInDollar = 654.0,
@@ -155,9 +153,8 @@ namespace AssetTracking2.Migrations
                         {
                             Id = 3,
                             Brand = "Iphone",
-                            LocalPrice = 274.16000000000003,
                             Model = "8",
-                            OfficeId = 3,
+                            OfficeId = 2,
                             PriceInDollar = 298.0,
                             PurchaseDate = new DateTime(2024, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Type = "Phone"
@@ -166,7 +163,6 @@ namespace AssetTracking2.Migrations
                         {
                             Id = 4,
                             Brand = "Samsung",
-                            LocalPrice = 2590.75,
                             Model = "fold",
                             OfficeId = 1,
                             PriceInDollar = 241.0,

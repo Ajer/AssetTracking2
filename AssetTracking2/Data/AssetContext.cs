@@ -35,6 +35,7 @@ namespace AssetTracking2.Data
             //        PurchaseDate = new DateTime(2024,7,1),
             //        Model = "XPS",
             //        PriceInDollar = 524,
+            //        LocalPrice = 524*10.75,
             //        OfficeId = 1
             //    },
 
@@ -45,6 +46,7 @@ namespace AssetTracking2.Data
             //        PurchaseDate = new DateTime(2023,5,30),
             //        Model = "Air",
             //        PriceInDollar = 654,
+            //        LocalPrice = 654,
             //        OfficeId = 2
             //    }
             //};
@@ -58,7 +60,8 @@ namespace AssetTracking2.Data
             //        PurchaseDate = new DateTime(2024,6,15),
             //        Model = "8",
             //        PriceInDollar = 298,
-            //        OfficeId = 2
+            //        LocalPrice = 298*0.92,
+            //        OfficeId = 3
             //    },
             //    new Phone{
             //        Id=4,
@@ -67,6 +70,7 @@ namespace AssetTracking2.Data
             //        PurchaseDate = new DateTime(2023,10,12),
             //        Model = "fold",
             //        PriceInDollar = 241,
+            //        LocalPrice = 241*10.75,
             //        OfficeId = 1
             //    }
 
@@ -81,19 +85,22 @@ namespace AssetTracking2.Data
             //    {
             //        Id = 1,
             //        City = "Stockholm",
-            //        Country = "Sweden"
+            //        Country = "Sweden",
+            //        Currency = "SEK"
             //    },
             //    new Office
             //    {
             //        Id = 2,
             //        City = "Buffalo",
-            //        Country = "USA"
+            //        Country = "USA",
+            //        Currency = "USD"
             //    },
             //    new Office
             //    {
             //        Id = 3,
             //        City = "Madrid",
-            //        Country = "Spain"
+            //        Country = "Spain",
+            //        Currency = "EUR"
             //    }
             //};
             //modelBuilder.Entity<Office>().HasData(offices);

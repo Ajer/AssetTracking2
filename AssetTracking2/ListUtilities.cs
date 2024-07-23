@@ -589,7 +589,26 @@ namespace AssetTracking2
             }
         }
 
+        private double GetLocalPrice(Office office, double price)
+        {
+            double fact = 0;
+            
+            // currency values from 2024-07-23 , googled values
 
+            if (office.Currency == "SEK")
+            {
+                fact = 10.75;                          
+            }
+            else if (office.Currency == "USD")
+            {
+                fact = 1;
+            }
+            else     // office.Currency == "EUR"
+            {
+                fact = 0.92;                     
+            }
+            return fact * price;
+        }
 
         // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date.
         // For instance: YYYY-04-30 is valid but YYYY-04-31 is not

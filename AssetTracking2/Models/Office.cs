@@ -18,6 +18,9 @@ namespace AssetTracking2.Models
         [MaxLength(50)]
         public string? Country { get; set; }
 
+        [StringLength(3)]
+        public string? Currency { get; set; }
+
         public ICollection<Asset> Assets { get; set; }   // Nav.property
 
     }
