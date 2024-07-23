@@ -1,4 +1,5 @@
-﻿using AssetTracking2.Models;
+﻿using AssetTracking2.Data;
+using AssetTracking2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using System;
@@ -8,6 +9,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -22,9 +24,6 @@ namespace AssetTracking2
         public AssetRepository AssetRepo { get; set; }
 
 
-        //public List<Project> Projects { get; set; }
-
-
         public ListUtilities()
         {
 
@@ -32,11 +31,11 @@ namespace AssetTracking2
         }
 
 
-        // HelpClass which let the user input an answer-string to a question
+        // HelpFunction which lets the user input an answer (string) to a question (userAction)
         // The answer-string is returned
         private string ReadDataFromUser(string userAction)
         {
-            Console.Write(userAction + ": ");    //example  userAction = "Enter a ProjectName"
+            Console.Write(userAction + ": ");    //example  userAction = "Enter a Name"
             string? data = Console.ReadLine();
 
             if (data != null)
@@ -107,7 +106,7 @@ namespace AssetTracking2
 
         // Lets the user decide if he wants to goahead with the removal of a Asset with a certain id
         // If 'Y/y': goes ahead with removal . if 'A/a' or 'Q/q': the process is aborted  
-        private void RemoveAsset(List<Asset> assets, int id)
+        private void RemoveAsset(int id)
         {
             bool dataDeleteOk = false;
             string dataDelete = "";
@@ -124,7 +123,7 @@ namespace AssetTracking2
                     dataDeleteOk = true;
                 }
             }
-            if (dataDelete != "a" && dataDelete != "q")   // Do the Edit
+            if (dataDelete != "a" && dataDelete != "q")     // Do the Remove
             {
 
                 try
@@ -132,19 +131,13 @@ namespace AssetTracking2
                     // Asset pT = assets.Find(item => item.Id == id);    //get task to remove. We know id exists here from ChangeTask()
 
                     // bool ok = tasks.Remove(pT);
-                    bool ok = true;
+
+                    bool ok = AssetRepo.DeleteAsset(id);
+                
                     if (ok)
                     {
-                        // bool ok2 = TaskRepository.SaveTasksToFile(tasks);   // List has been changed. Save new List to file.
-                        bool ok2 = true;
-                        if (ok2)
-                        {
-                            SuccessMessage("removed");     // The maxId stays the same even if we have erased this id here. (Simulate DB)                   
-                        }
-                        else
-                        {
-                            FailMessage("removing an asset");
-                        }
+              
+                        SuccessMessage("removed");                     
                     }
                     else
                     {
@@ -161,7 +154,7 @@ namespace AssetTracking2
 
 
         // Lets the user decide what param to edit and then does the editing
-        private void EditAsset(List<Asset> assets, int id)
+        private void EditAsset(int id)
         {
 
             string dataEditParameter = "";
@@ -171,10 +164,12 @@ namespace AssetTracking2
 
             while (!dataEditParameterOk)
             {
-                dataEditParameter = ReadDataFromUser("Do you want to edit Due Date 'dd' , Project 'p' , Title 't' or Status 's' ");
+                dataEditParameter = ReadDataFromUser("Do you want to edit Brand 'b' , Model 'm' , PriceInDollar 'p', LocalPrice 'lp', OfficeId 'o'" +
+                    " or DatePurchased 'dp'");
                 dataEditParameter = dataEditParameter.ToLower();
 
-                if (dataEditParameter == "dd" || dataEditParameter == "p" || dataEditParameter == "t" || dataEditParameter == "s" || dataEditParameter == "q")
+                if (dataEditParameter == "dp" || dataEditParameter == "b" || dataEditParameter == "m" || dataEditParameter == "p" || dataEditParameter == "lp" ||
+                    dataEditParameter == "o" || dataEditParameter == "q")
                 {
                     dataEditParameterOk = true;
                 }
@@ -185,23 +180,29 @@ namespace AssetTracking2
 
                 try
                 {
-                    //Asset pT = assets.Find(item => item.Id == id);    //get task to edit, we know id exists here from ChangeLIst
 
-                    if (dataEditParameter == "dd")
+                    Asset a = AssetRepo.GetAsset(id);        // get asset to edit, we know id exists here from ChangeAsset
+
+                    if (dataEditParameter == "dp")
                     {
-                        string dataDueDate = "";
+                        string dataPurchasedDate = "";
                         bool dateTimeOk = false;
 
                         while (!dateTimeOk)
                         {
-                            dataDueDate = ReadDataFromUser("Enter a new value for DueDate in format YYYY-MM-DD");
-                            if (ValidateDate(dataDueDate))
+                            dataPurchasedDate = ReadDataFromUser("Enter a new value for PurchasedDate in format YYYY-MM-DD");
+                            if (ValidateDate(dataPurchasedDate))
                             {
                                 dateTimeOk = true;
                             }
                         }
-                        DateTime dueDt = Convert.ToDateTime(dataDueDate);
-                       // pT.DueDate = dueDt;                       // edit attribute
+
+                        DateTime purDt = Convert.ToDateTime(dataPurchasedDate);
+                        a.PurchaseDate = purDt;     // change field
+
+                        
+
+         
 
                     }
                     else if (dataEditParameter == "p")
@@ -266,9 +267,8 @@ namespace AssetTracking2
                         }
                     }
 
-                    // write to file
-                    //  bool ok = TaskRepository.SaveTasksToFile(tasks);   // List has been changed. Save new List to file.
-                    bool ok = false;
+
+                    bool ok = AssetRepo.UpdateAsset(a);     // Do the update
 
                     if (ok)
                     {
@@ -522,7 +522,7 @@ namespace AssetTracking2
 
 
         // Start method accessible from program-class for editing / deleting a task
-        public void ChangeAsset(List<Asset> assets)
+        public void ChangeAsset()
         {
             Console.WriteLine();
 
@@ -539,7 +539,7 @@ namespace AssetTracking2
              
                     QuitCue();
                    
-                    dataId = ReadDataFromUser("Write the Id-number for the asset you want to change");
+                    dataId = ReadDataFromUser("Write the Id-number for the asset you want to edit/remove");
                     dataId = dataId.ToLower();
 
                     if (dataId != "q")
@@ -549,15 +549,13 @@ namespace AssetTracking2
 
                         if (intOk)
                         {
-                            // int index = assets.FindIndex(item => item.Id == id);  // FindIndex Only used to check if id exists  
-                            int index = 0;
-
-
-                            if (index >= 0)    // id exists
+                            bool ok_id = AssetRepo.ExistsId(id);  // Only used to check if id exists  
+                            
+                            if (ok_id)     // id exists
                             {
                                 dataIdOk = true;
                             }
-                            else  // -1
+                            else  
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("The ID was not found");
@@ -600,12 +598,12 @@ namespace AssetTracking2
                 if (dataEditOrRemove == "e")   // edit task
                 {
 
-                    EditAsset(assets, id);
+                    EditAsset(id);
 
                 }
                 else   // remove task  "x"
                 {
-                    RemoveAsset(assets, id);
+                    RemoveAsset(id);
 
                     break;
                 }

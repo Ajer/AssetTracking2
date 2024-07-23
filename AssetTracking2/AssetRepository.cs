@@ -21,6 +21,16 @@ namespace AssetTracking2
             return list;
         }
 
+        public Asset GetAsset(int id)
+        {
+            Asset a;
+            using (var context = new AssetContext())
+            {
+                a = context.Assets.Where(elem=>elem.Id==id).FirstOrDefault();
+            }
+            return a;
+        }
+
         public bool CreateComputer(Computer c)
         {
             bool createOk = false;
@@ -59,6 +69,53 @@ namespace AssetTracking2
             return createOk;
         }
 
+        public bool UpdateAsset(Asset a)
+        {
+            bool updateOk = false;
+            using (var context = new AssetContext())
+            {
+                try
+                {
+
+                    if (a != null)
+                    {
+                        context.Assets.Update(a);
+                        context.SaveChanges();
+                        updateOk = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    updateOk = false;
+                }
+            }
+            return updateOk;
+        }
+
+        public bool DeleteAsset(int id)
+        {
+            bool delOk = false;
+            using (var context = new AssetContext())
+            {
+                try
+                {
+                    var a = context.Assets.Where(elem => elem.Id == id).FirstOrDefault();
+                    if (a != null)
+                    {
+                        context.Assets.Remove(a);
+                        context.SaveChanges();
+                        delOk = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    delOk = false;
+                }
+            }
+            return delOk;
+        }
+
+
         public int GetOfficeId(string dataOfficeCountry)
         {
             
@@ -77,6 +134,20 @@ namespace AssetTracking2
 
                 return 0;
             }
+        }
+
+        public bool ExistsId(int id)
+        {
+            bool found = false;
+            using (var context = new AssetContext())
+            {
+                var a = context.Assets.Where(item => item.Id == id).FirstOrDefault();
+                if (a!=null)
+                {
+                    found = true;
+                }
+            }
+            return found;
         }
     }
 }

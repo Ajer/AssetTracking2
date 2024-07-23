@@ -20,6 +20,7 @@ void Main()
         if (choice.Trim().ToLower() == "1")       // 1 - Show List
         {
             lu.UserChoiceHeader("Show List Of Assets");
+
             //string sort = lu.UserSortsList();
             //if (sort != "q")
             //{
@@ -33,14 +34,14 @@ void Main()
             lu.AddAsset();
 
         }
-        else if (choice.Trim().ToLower() == "3")     // 3 - Edit Task (update, mark as done, remove)
+        else if (choice.Trim().ToLower() == "3")     // 3 - Edit Asset (update,remove)
         {
             lu.UserChoiceHeader("Edit asset / Remove Asset");
-           // lu.PrintAllAssets();  // p
-           // lu.ChangeAsset();
+            lu.PrintAllAssets(); 
+            lu.ChangeAsset();
 
         }
-        else if (choice.Trim().ToLower() == "4")     // 4 = Quit  (Everything already saved in TaskListUtilities)
+        else if (choice.Trim().ToLower() == "4")     // 4 - Quit
         {
 
             break;
