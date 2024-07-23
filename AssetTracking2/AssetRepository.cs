@@ -16,7 +16,7 @@ namespace AssetTracking2
             List<Asset> list;
             using (var context = new AssetContext())
             {
-                list = context.Assets.ToList();
+                list = context.Assets.Include(a=>a.Office).ToList();
             }
             return list;
         }

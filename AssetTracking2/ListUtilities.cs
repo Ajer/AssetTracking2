@@ -680,6 +680,7 @@ namespace AssetTracking2
             string priceDollarString = "Price dollar";
             //string localPriceString = "Local Price";
             string purchasedString = "Purchased Date";
+            string officeString = "Office";
 
 
             //if (sort == "p")
@@ -700,10 +701,10 @@ namespace AssetTracking2
             //}
 
             Console.WriteLine();
-            Console.WriteLine("Id".ToString().PadLeft(3).PadRight(7) + typeString.PadRight(10) + brandString.PadRight(23) + modelString.ToString().PadRight(23) + priceDollarString.ToString().PadRight(15) +
-                purchasedString);
+            Console.WriteLine("Id".ToString().PadLeft(3).PadRight(7) + typeString.PadRight(10) + brandString.PadRight(18) + modelString.PadRight(18) + officeString.PadRight(10) + priceDollarString.PadRight(15) +
+                purchasedString); ;
             
-            Console.WriteLine("--".ToString().PadLeft(3).PadRight(7) + "----".PadRight(10) + "-------".PadRight(23) + "------".ToString().PadRight(23) + "-------".ToString().PadRight(15) +
+            Console.WriteLine("--".ToString().PadLeft(3).PadRight(7) + "----".PadRight(10) + "-----".PadRight(18) + "-----".ToString().PadRight(18) + "------".ToString().PadRight(10)  + "----------".ToString().PadRight(15) +
                 "-------------");
         }
 
@@ -729,7 +730,7 @@ namespace AssetTracking2
 
                     string dt = asset.PurchaseDate.Value.ToString("yyyy-MM-dd");
                  
-                    Console.WriteLine(asset.Id.ToString().PadLeft(2).PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(23) + asset.Model.PadRight(23) + asset.PriceInDollar.ToString().PadRight(15) 
+                    Console.WriteLine(asset.Id.ToString().PadLeft(2).PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(18) + asset.Model.PadRight(18) + asset.Office.Country.PadRight(10) + asset.PriceInDollar.ToString().PadRight(15) 
                      + dt);
 
                     Console.ResetColor();
