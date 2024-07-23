@@ -307,6 +307,7 @@ namespace AssetTracking2
             string dataModelName = "";
             string dataPurchasedDate = "";
             string dataPrice = "";
+            string dataOfficeCountry = "";
             
             //string dataOfficeCountry = "";
 
@@ -363,7 +364,7 @@ namespace AssetTracking2
                 while (!dateTimeOk)
                 {
                     dataPurchasedDate = ReadDataFromUser("Enter a PurchaseDate in format YYYY-MM-DD. Write q to quit");
-                    if (ValidateDate(dataPurchasedDate.Trim()) || dataPurchasedDate.Trim().ToLower() == "q")
+                    if (ValidateDate(dataPurchasedDate.Trim()) || dataPurchasedDate.Trim().ToLower() == "q")    // Test that Date exists
                     {
                         dateTimeOk = true;
                     }
@@ -403,13 +404,29 @@ namespace AssetTracking2
                     break;
                 }
 
+                bool officeOk = false;
+                while (!officeOk)
+                {
+                    dataOfficeCountry = ReadDataFromUser("Enter Office Country 'SWE', 'USA' or 'SPA'. Write q to quit");
+                    if (dataOfficeCountry.Trim().ToLower() == "swe" || dataOfficeCountry.Trim().ToLower() == "usa" ||
+                       dataOfficeCountry.Trim().ToLower() == "spa" || dataOfficeCountry.Trim().ToLower() == "q")
+                    {
+                        officeOk = true;
+                    }
+                }
+                if (dataOfficeCountry.Trim().ToLower() == "q")
+                {
+                    break;
+                }
 
+                int officeId = AssetRepo.GetOfficeId(dataOfficeCountry.Trim().ToUpper());
+
+                double localPrice = GetLocalPrice(dataOfficeCountry.Trim().ToUpper(),price);
+ 
+                DateTime purDt = Convert.ToDateTime(dataPurchasedDate);
 
                 // All datas here because no break has been performed
 
-                DateTime purDt = Convert.ToDateTime(dataPurchasedDate);
-           
-            
                 try
                 {
                     bool okStf = false;
@@ -421,7 +438,9 @@ namespace AssetTracking2
                             Type = "Computer",
                             Brand = dataBrandName,
                             Model = dataModelName,
+                            OfficeId = officeId,
                             PriceInDollar = price,
+                            LocalPrice = localPrice,
                             PurchaseDate = purDt
                         };
 
@@ -435,7 +454,9 @@ namespace AssetTracking2
                             Type = "Phone",
                             Brand = dataBrandName,
                             Model = dataModelName,
+                            OfficeId = officeId,
                             PriceInDollar = price,
+                            LocalPrice = localPrice,
                             PurchaseDate = purDt
                         };
 
@@ -458,6 +479,8 @@ namespace AssetTracking2
                 }               
             }
         }
+
+        
 
 
         // Informs the user of the possibility to quit
@@ -589,17 +612,17 @@ namespace AssetTracking2
             }
         }
 
-        private double GetLocalPrice(Office office, double price)
+        private double GetLocalPrice(string country_code, double price)
         {
             double fact = 0;
             
             // currency values from 2024-07-23 , googled values
 
-            if (office.Currency == "SEK")
+            if (country_code == "SWE")
             {
                 fact = 10.75;                          
             }
-            else if (office.Currency == "USD")
+            else if (country_code == "USA")
             {
                 fact = 1;
             }
@@ -607,7 +630,8 @@ namespace AssetTracking2
             {
                 fact = 0.92;                     
             }
-            return fact * price;
+
+            return Math.Round(fact * price,2);
         }
 
         // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date.
@@ -723,8 +747,8 @@ namespace AssetTracking2
             Console.WriteLine("Id".ToString().PadLeft(3).PadRight(7) + typeString.PadRight(10) + brandString.PadRight(18) + modelString.PadRight(18) + officeString.PadRight(10) + priceDollarString.PadRight(12) +
                localPriceString.PadRight(15) + purchasedString); ;
             
-            Console.WriteLine("--".ToString().PadLeft(3).PadRight(7) + "----".PadRight(10) + "-----".PadRight(18)  +"-----".ToString().PadRight(18) + "------".ToString().PadRight(10)  + "----------".ToString().PadRight(12) +
-               "----------".ToString().PadRight(15) + "-------------");
+            Console.WriteLine("--".ToString().PadLeft(3).PadRight(7) + "----".PadRight(10) + "-----".PadRight(18)  +"-----".ToString().PadRight(18) + "------".ToString().PadRight(10)  + "---------".ToString().PadRight(12) +
+               "-----------".ToString().PadRight(15) + "-------------");
         }
 
 
@@ -748,9 +772,10 @@ namespace AssetTracking2
                 {
 
                     string dt = asset.PurchaseDate.Value.ToString("yyyy-MM-dd");
+                    string locPrice = Math.Round((double)asset.LocalPrice, 2).ToString();
                  
                     Console.WriteLine(asset.Id.ToString().PadLeft(2).PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(18) + asset.Model.PadRight(18) + asset.Office.Country.PadRight(10) + asset.PriceInDollar.ToString().PadRight(12) +
-                      asset.LocalPrice.ToString().PadRight(15) + dt);
+                      locPrice.PadRight(15) + dt);
 
                     Console.ResetColor();
                 }

@@ -58,5 +58,25 @@ namespace AssetTracking2
             }
             return createOk;
         }
+
+        public int GetOfficeId(string dataOfficeCountry)
+        {
+            
+            using (var context = new AssetContext())
+            {
+                Office o =  context.Offices.Where(t => t.CountryCode == dataOfficeCountry).FirstOrDefault();
+
+                //var  o =  (from off in context.Offices
+                //           where off.CountryCode == dataOfficeCountry
+                //           select off).FirstOrDefault();
+
+                if (o != null)
+                {
+                    return o.Id;
+                }
+
+                return 0;
+            }
+        }
     }
 }
