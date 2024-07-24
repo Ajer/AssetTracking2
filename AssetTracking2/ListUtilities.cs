@@ -164,12 +164,12 @@ namespace AssetTracking2
 
             while (!dataEditParameterOk)
             {
-                dataEditParameter = ReadDataFromUser("Do you want to edit Brand 'b' , Model 'm' , Price ($) 'p', Office 'o'" +
+                dataEditParameter = ReadDataFromUser("Do you want to edit Type 't' , Brand 'b' , Model 'm' , Price ($) 'p', Office 'o'" +
                     " or DatePurchased 'dp'");
                 dataEditParameter = dataEditParameter.ToLower();
 
                 if (dataEditParameter == "dp" || dataEditParameter == "b" || dataEditParameter == "m" || dataEditParameter == "p" ||
-                    dataEditParameter == "o" || dataEditParameter == "q")
+                    dataEditParameter == "o" || dataEditParameter == "t" || dataEditParameter == "q")
                 {
                     dataEditParameterOk = true;
                 }
@@ -183,7 +183,51 @@ namespace AssetTracking2
 
                     Asset a = AssetRepo.GetAsset(id);        // get asset to edit, we know id exists here from ChangeAsset
 
-                    if (dataEditParameter == "dp")
+                    if (dataEditParameter == "t")
+                    {
+                        //string typeName = "";
+                        //bool typeNameOk = false;
+
+                        //while (!typeNameOk)
+                        //{
+                        //    typeName = ReadDataFromUser("Give a new value for Type : 'Computer' or 'Phone'");
+                        //    if (typeName.ToLower() == "computer" || typeName.ToLower() == "phone")
+                        //    {
+                        //        typeNameOk = true;
+                        //    }
+                        //}
+
+                        //string oldType = a.Type;
+
+                        //string t = typeName.ToLower();
+                        //typeName = $"{t[0].ToString().ToUpper()}{t.Substring(1)}";   // Sets first Letter : Big 'C' or big 'P'
+
+                        //a.Type = typeName;
+
+
+                        //Phone p = new Phone
+                        //{
+                        //    Id = 13,
+                        //    Type = "Phone",
+                        //    Brand = a.Brand,
+                        //    Model = a.Model,
+                        //    OfficeId = a.OfficeId,
+                        //    PriceInDollar = a.PriceInDollar,
+                        //    LocalPrice = a.LocalPrice,
+                        //    PurchaseDate = a.PurchaseDate
+                        //};
+
+                        //bool ok1 = AssetRepo.DeleteComputer(12);
+
+                        //bool ok2 = AssetRepo.CreatePhone(p);
+
+                        //p.Id = 12;
+                        //bool ok3 = AssetRepo.UpdatePhone(p);
+
+                        
+                                                
+                    }
+                    else if (dataEditParameter == "dp")
                     {
                         string dataPurchasedDate = "";
                         bool dateTimeOk = false;
@@ -301,7 +345,7 @@ namespace AssetTracking2
 
 
                     bool ok = AssetRepo.UpdateAsset(a);     // Do the update
-                   
+
 
                     if (ok)
                     {
@@ -761,7 +805,7 @@ namespace AssetTracking2
         }
 
 
-        // Writes the headers for the different task-params
+        // Writes the headers for the different asset-params
         private void ListHeader(string sort="")
         {
             string typeString = "Type";
@@ -774,28 +818,42 @@ namespace AssetTracking2
             string officeString = "Office";
 
 
-            //if (sort == "p")
-            //{
-            //    projString = "Project'";
-            //}
-            //else if (sort == "d")
-            //{
-            //    dueString = "DueDate'";
-            //}
-            //else if (sort == "t")
-            //{
-            //    taskString = "Task'";
-            //}
-            //else if (sort == "s")
-            //{
-            //    statusString = "Status'";
-            //}
+            if (sort == "b")
+            {
+                brandString = "Brand'";
+            }
+            else if (sort == "m")
+            {
+                modelString = "Model'";
+            }
+            else if (sort == "p")
+            {
+                priceDollarString = "Price ($)'";
+            }
+            else if (sort == "lp")
+            { 
+                localPriceString = "Local Price'";
+            }
+            else if (sort == "pd")
+            {
+                purchasedString = "Purchased Date'";
+            }
+            else if (sort == "o")
+            {
+                officeString = "Office'";
+            }
+            else
+            {
+                typeString = "Type'";
+            }
+
+
 
             Console.WriteLine();
-            Console.WriteLine("Id".ToString().PadLeft(3).PadRight(7) + typeString.PadRight(10) + brandString.PadRight(18) + modelString.PadRight(18) + officeString.PadRight(10) + priceDollarString.PadRight(12) +
+            Console.WriteLine("Id".ToString().PadLeft(3).PadRight(8) + typeString.PadRight(10) + brandString.PadRight(18) + modelString.PadRight(18) + officeString.PadRight(10) + priceDollarString.PadRight(12) +
                localPriceString.PadRight(14) + currencyString.PadRight(6) + purchasedString); ;
             
-            Console.WriteLine("--".ToString().PadLeft(3).PadRight(7) + "----".PadRight(10) + "-----".PadRight(18)  +"-----".ToString().PadRight(18) + "------".ToString().PadRight(10)  + "---------".ToString().PadRight(12) +
+            Console.WriteLine("--".ToString().PadLeft(3).PadRight(8) + "----".PadRight(10) + "-----".PadRight(18)  +"-----".ToString().PadRight(18) + "------".ToString().PadRight(10)  + "---------".ToString().PadRight(12) +
                "-----------".ToString().PadRight(14) + "----".ToString().PadRight(6) + "-------------");
         }
 
@@ -803,13 +861,16 @@ namespace AssetTracking2
        
   
         // Gets the Assets from the db and prints them in a list
-        public async void PrintAllAssets()
+        public void PrintAllAssets()
         {             
             List<Asset> assets =  AssetRepo.GetAllAssets();          // Get from DB
 
-            List<Asset> sorted = GetSortedAssets(assets,"");     // Level 2 - DefaultSort
+            //string sort = "";      // Level 2 - DefaultSort
+            string sort = "o";       // Level 3 - OfficeSort
 
-            ListHeader();        // show the sort-method by quotation-mark
+            List<Asset> sorted = GetSortedAssets(assets,sort);        
+
+            ListHeader(sort);                                          // show the sort-method by quotation-mark
 
             int cmpTime = 1096;   // 1096 days approx. 3 years
             if (assets.Any())
@@ -825,7 +886,7 @@ namespace AssetTracking2
                     string dt = asset.PurchaseDate.Value.ToString("yyyy-MM-dd");
                     string locPrice = Math.Round((double)asset.LocalPrice, 2).ToString();
                  
-                    Console.WriteLine(asset.Id.ToString().PadLeft(2).PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(18) + asset.Model.PadRight(18) + asset.Office.Country.PadRight(10) + asset.PriceInDollar.ToString().PadRight(12) +
+                    Console.WriteLine(" " + asset.Id.ToString().PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(18) + asset.Model.PadRight(18) + asset.Office.Country.PadRight(10) + asset.PriceInDollar.ToString().PadRight(12) +
                       locPrice.PadRight(14) + asset.Office.Currency.PadRight(6) + dt);
 
                     Console.ResetColor();

@@ -92,6 +92,8 @@ namespace AssetTracking2
             return updateOk;
         }
 
+        
+
         public bool DeleteAsset(int id)
         {
             bool delOk = false;
@@ -115,6 +117,7 @@ namespace AssetTracking2
             return delOk;
         }
 
+        
 
         public int GetOfficeId(string officeCountryCode)
         {
@@ -149,5 +152,6 @@ namespace AssetTracking2
             }
             return found;
         }
+
     }
 }
