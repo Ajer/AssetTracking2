@@ -691,56 +691,63 @@ namespace AssetTracking2
         }
 
 
+        private List<Asset> BrandSort(List<Asset> assets)
+        {
+            return assets.OrderBy(item => item.Brand).ThenBy(item => item.PurchaseDate).ToList();
+        }
+
+        private List<Asset> ModelSort(List<Asset> assets)
+        {
+            return assets.OrderBy(item => item.Model).ThenBy(item => item.PurchaseDate).ToList();
+        }
+
+        private List<Asset> OfficeSort(List<Asset> assets)
+        {
+            return assets.OrderBy(item => item.Office.Country).ThenBy(item => item.PurchaseDate).ToList();
+        }
+
+        private List<Asset> PriceDollarSort(List<Asset> assets)
+        {
+            return assets.OrderBy(item => item.PriceInDollar).ThenBy(item => item.PurchaseDate).ToList();
+        }
+
+        private List<Asset> PurchasedDateSort(List<Asset> assets)
+        {
+            return assets.OrderBy(item => item.Brand).ThenBy(item => item.PurchaseDate).ToList();
+        }
+
+        private List<Asset> DefaultSort(List<Asset> assets)
+        {
+            return assets.OrderBy(item => item.Type).ThenBy(item=>item.PurchaseDate).ToList();
+        }
 
 
-        // Sort by ascending Title
-        //private List<ProjectTask> TitleSort(List<ProjectTask> tasks)
-        //{
-        //    return tasks.OrderBy(item => item.TaskTitle).ToList();
-        //}
+        //Help_Method to PrintAllAssets who returns the assets sorted according to 'sort'
+        private List<Asset> GetSortedAssets(List<Asset> assets, string sort)
+        {
+            if (sort == "b")
+            {
+                return BrandSort(assets);
+            }
+            else if (sort == "m")
+            {
+                return ModelSort(assets);
+            }
+            else if (sort == "o")
+            {
+                return OfficeSort(assets);
+            }
+            else if (sort == "p")
+            {
+                return PriceDollarSort(assets);
+            }
+            else if (sort == "pd")
+            {
+                return PurchasedDateSort(assets);
+            }
 
-
-        //// Sort by ascending ProjectName
-        //private List<ProjectTask> ProjectSort(List<ProjectTask> tasks)
-        //{
-        //    return tasks.OrderBy(item => item.Project.Name).ToList();
-        //}
-
-
-        //// Sort by ascending date
-        //private List<ProjectTask> DateSort(List<ProjectTask> tasks)
-        //{
-        //    return tasks.OrderBy(item => item.DueDate).ToList();
-        //}
-
-
-        //// Sort by alphabetical status:  Done,NotStarted,Started
-        //private List<ProjectTask> StatusSort(List<ProjectTask> tasks)
-        //{
-        //    return tasks.OrderBy(item => item.Status.ToString()).ToList();
-        //}
-
-
-        // Help-Method to PrintAllTasks who returns the sort wanted 
-        //private List<ProjectTask> GetSortedTasks(List<ProjectTask> tasks, string sort)
-        //{
-        //    if (sort == "p")
-        //    {
-        //        return ProjectSort(tasks);
-        //    }
-        //    else if (sort == "d")
-        //    {
-        //        return DateSort(tasks);
-        //    }
-        //    else if (sort == "s")
-        //    {
-        //        return StatusSort(tasks);
-        //    }
-        //    else       //   sort=="t"
-        //    {
-        //        return TitleSort(tasks);
-        //    }
-        //}
+            return DefaultSort(assets);   // By Type , then by PurchaseDate
+        }
 
         // Writes the Header of the main-alternative 1-4
         public void UserChoiceHeader(string choice)
@@ -802,14 +809,14 @@ namespace AssetTracking2
               
             List<Asset> assets =  AssetRepo.GetAllAssets();
 
-            // List<Asset> sorted = GetSortedAssets(assets, sort);
+            List<Asset> sorted = GetSortedAssets(assets,"Def");
 
             ListHeader();        // show the sort-method by quotation-mark
 
             if (assets.Any())
             {
                 //int cmpTime = 10;    //  days
-                foreach (var asset in assets.ToList()) // Show List
+                foreach (var asset in sorted) // Show List
                 {
 
                     string dt = asset.PurchaseDate.Value.ToString("yyyy-MM-dd");
