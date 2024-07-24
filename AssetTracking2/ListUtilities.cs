@@ -801,23 +801,26 @@ namespace AssetTracking2
 
 
        
-        //public void PrintAllAssets(string sort)
-
+  
+        // Gets the Assets from the db and prints them in a list
         public async void PrintAllAssets()
-        {
+        {             
+            List<Asset> assets =  AssetRepo.GetAllAssets();          // Get from DB
 
-              
-            List<Asset> assets =  AssetRepo.GetAllAssets();
-
-            List<Asset> sorted = GetSortedAssets(assets,"Def");
+            List<Asset> sorted = GetSortedAssets(assets,"");     // Level 2 - DefaultSort
 
             ListHeader();        // show the sort-method by quotation-mark
 
+            int cmpTime = 1096;   // 1096 days approx. 3 years
             if (assets.Any())
             {
-                //int cmpTime = 10;    //  days
                 foreach (var asset in sorted) // Show List
                 {
+                    int ts = GetTimeSpanInDays(asset.PurchaseDate);   // ts = Number of days since it was purchased
+                    if (cmpTime - ts <= 91 && (cmpTime - ts >= 0))   // assets betwwen 2 years 9 months and 3 years old will be colored red 
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;   
+                    }
 
                     string dt = asset.PurchaseDate.Value.ToString("yyyy-MM-dd");
                     string locPrice = Math.Round((double)asset.LocalPrice, 2).ToString();
@@ -838,10 +841,14 @@ namespace AssetTracking2
             Console.WriteLine("-----------------------------------------------------------------------------------");
         }
 
-        //private int GetTimeSpanInDays(DateTime dt)
-        //{
-        //    TimeSpan ts = dt - DateTime.Now;
-        //    return ts.Days;
-        //}
+        private int GetTimeSpanInDays(DateTime? dt)
+        {
+            if (dt != null)
+            {
+                TimeSpan ts = (TimeSpan)(DateTime.Now - dt);
+                return ts.Days;
+            }
+            return 0;
+        }
     }
 }
