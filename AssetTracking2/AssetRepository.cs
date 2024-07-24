@@ -11,7 +11,7 @@ namespace AssetTracking2
 {
     public class AssetRepository
     {
-        public async Task<List<Asset>> GetAllAssets()
+        public List<Asset> GetAllAssets()
         {
             List<Asset> list;
             using (var context = new AssetContext())
@@ -26,7 +26,7 @@ namespace AssetTracking2
             Asset a;
             using (var context = new AssetContext())
             {
-                a = context.Assets.Where(elem=>elem.Id==id).FirstOrDefault();
+                a = context.Assets.Include(a=>a.Office).Where(elem=>elem.Id==id).FirstOrDefault();
             }
             return a;
         }
@@ -116,12 +116,12 @@ namespace AssetTracking2
         }
 
 
-        public int GetOfficeId(string dataOfficeCountry)
+        public int GetOfficeId(string officeCountryCode)
         {
             
             using (var context = new AssetContext())
             {
-                Office o =  context.Offices.Where(t => t.CountryCode == dataOfficeCountry).FirstOrDefault();
+                Office o =  context.Offices.Where(t => t.CountryCode == officeCountryCode).FirstOrDefault();
 
                 //var  o =  (from off in context.Offices
                 //           where off.CountryCode == dataOfficeCountry

@@ -164,11 +164,11 @@ namespace AssetTracking2
 
             while (!dataEditParameterOk)
             {
-                dataEditParameter = ReadDataFromUser("Do you want to edit Brand 'b' , Model 'm' , PriceInDollar 'p', LocalPrice 'lp', OfficeId 'o'" +
+                dataEditParameter = ReadDataFromUser("Do you want to edit Brand 'b' , Model 'm' , Price ($) 'p', Office 'o'" +
                     " or DatePurchased 'dp'");
                 dataEditParameter = dataEditParameter.ToLower();
 
-                if (dataEditParameter == "dp" || dataEditParameter == "b" || dataEditParameter == "m" || dataEditParameter == "p" || dataEditParameter == "lp" ||
+                if (dataEditParameter == "dp" || dataEditParameter == "b" || dataEditParameter == "m" || dataEditParameter == "p" ||
                     dataEditParameter == "o" || dataEditParameter == "q")
                 {
                     dataEditParameterOk = true;
@@ -198,77 +198,110 @@ namespace AssetTracking2
                         }
 
                         DateTime purDt = Convert.ToDateTime(dataPurchasedDate);
-                        a.PurchaseDate = purDt;     // change field
-
-                        
-
-         
+                        a.PurchaseDate = purDt;     // edit field
 
                     }
+                    else if (dataEditParameter == "b")
+                    {
+                        string brandName = "";
+                        bool brandNameOk = false;
+
+                        while (!brandNameOk)
+                        {
+                            brandName = ReadDataFromUser("Give a new value for Brand");
+                            if (brandName != "")
+                            {
+                                brandNameOk = true;
+                            }
+                        }
+
+                        a.Brand = brandName;    // edit field
+                                                // 
+                    }
+                    else if (dataEditParameter == "m")
+                    {
+
+                        string model = "";
+                        bool modelOk = false;
+
+                        while (!modelOk)
+                        {
+                            model = ReadDataFromUser("Give a new value for Model");
+                            if (model != "")
+                            {
+                                modelOk = true;
+                            }
+                        }
+
+                        a.Model = model;
+                    }
+
                     else if (dataEditParameter == "p")
                     {
-                        string projName = "";
-                        bool projNameOk = false;
+                        string dataPrice = "";
+                        bool priceOk = false;
+                        double price = 0;
 
-                        while (!projNameOk)
+                        while (!priceOk)
                         {
-                            projName = ReadDataFromUser("Give a new value for projectName");
-                            if (projName!="")
+                            dataPrice = ReadDataFromUser("Enter a Price in USD");
+                            if (dataPrice != "")
                             {
-                                projNameOk = true;
+                                try
+                                {
+                                    price = Convert.ToDouble(dataPrice);
+                                    priceOk = true;
+                                }
+                                catch (Exception e)  //.......
+                                {
+
+                                    priceOk = false;
+                                }
                             }
                         }
 
-                       // pT.Project.Name = projName;  // we have a non-blank-value
+                        double lp = GetLocalPrice(a.Office.CountryCode, price);
+
+                        a.PriceInDollar = price;
+                        a.LocalPrice = lp;
                     }
-                    else if (dataEditParameter == "t")
+
+                    else if (dataEditParameter == "o")
                     {
 
-                        string taskTitle = "";
-                        bool taskTitleOk = false;
+                        string officeCountry = "";
+                        bool officeCountryOk = false;
 
-                        while (!taskTitleOk)
+                        while (!officeCountryOk)
                         {
-                            taskTitle = ReadDataFromUser("Give a new value for taskTitle");
-                            if (taskTitle!= "")
+                            officeCountry = ReadDataFromUser("Give a new value for OfficeCountry, 'SWE','USA' or 'SPA'");
+                            officeCountry = officeCountry.ToUpper();
+
+                            if (officeCountry == "SWE" || officeCountry == "USA" || officeCountry == "SPA")
                             {
-                                taskTitleOk = true;
+                                officeCountryOk = true;
                             }
                         }
 
-                       // pT.TaskTitle = taskTitle;
-                    }
-                    else   // "s"
-                    {
-                        bool statusOk = false;
-                        string status = "";
+                        int officeId = AssetRepo.GetOfficeId(officeCountry);
+                        double lp = GetLocalPrice(officeCountry, a.PriceInDollar);
 
-                        while (!statusOk)
+                        a = new Asset    // since we are updating OfficeId (FK) we need to create a new Asset-object to use when updating
                         {
-                            status = ReadDataFromUser("Give new value for status. Not Started 'ns', Started 's' or Done 'd'");
-                            status = status.ToLower();
-
-                            if (status == "ns" || status == "s" || status == "d")
-                            {
-                                statusOk = true;
-                            }
-                        }
-                        if (status == "ns")
-                        {
-                          //  pT.Status = TaskStatus.NotStarted;
-                        }
-                        else if (status == "s")
-                        {
-                          //  pT.Status = TaskStatus.Started;
-                        }
-                        else if (status == "d")
-                        {
-                          //  pT.Status = TaskStatus.Done;
-                        }
+                            Id = a.Id,
+                            Type = a.Type,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            OfficeId = officeId,
+                            PriceInDollar = a.PriceInDollar,
+                            LocalPrice = lp,
+                            PurchaseDate = a.PurchaseDate
+                        };
                     }
 
 
                     bool ok = AssetRepo.UpdateAsset(a);     // Do the update
+                   
 
                     if (ok)
                     {
@@ -610,27 +643,36 @@ namespace AssetTracking2
             }
         }
 
-        private double GetLocalPrice(string country_code, double price)
+        private double GetLocalPrice(string country_code, double? price)
         {
-            double fact = 0;
-            
-            // currency values from 2024-07-23 , googled values
+            if (price != null)
+            {
+                double fact = 0;
 
-            if (country_code == "SWE")
-            {
-                fact = 10.75;                          
-            }
-            else if (country_code == "USA")
-            {
-                fact = 1;
-            }
-            else     // office.Currency == "EUR"
-            {
-                fact = 0.92;                     
-            }
+                // currency values from 2024-07-23 , googled values
 
-            return Math.Round(fact * price,2);
+                if (country_code == "SWE")
+                {
+                    fact = 10.75;           // 1 dollar = 10.75 SEK                 
+                }
+                else if (country_code == "USA")
+                {
+                    fact = 1;
+                }
+                else     // country_code= "SPA",  office.Currency == "EUR"
+                {
+                    fact = 0.92;              // 1 dollar = 0.92 Euros         
+                }
+
+                return Math.Round(fact *(double) price, 2);
+            }
+            else
+            {
+                FailMessage("when assigning a local price. Price in USD was not set");
+                return 0;
+            }
         }
+
 
         // Checks if a datetime-string of format "yyyy-MM-dd" is a valid date.
         // For instance: YYYY-04-30 is valid but YYYY-04-31 is not
@@ -720,6 +762,7 @@ namespace AssetTracking2
             string modelString = "Model";
             string priceDollarString = "Price ($)";
             string localPriceString = "Local Price";
+            string currencyString = "Curr";
             string purchasedString = "Purchased Date";
             string officeString = "Office";
 
@@ -743,10 +786,10 @@ namespace AssetTracking2
 
             Console.WriteLine();
             Console.WriteLine("Id".ToString().PadLeft(3).PadRight(7) + typeString.PadRight(10) + brandString.PadRight(18) + modelString.PadRight(18) + officeString.PadRight(10) + priceDollarString.PadRight(12) +
-               localPriceString.PadRight(15) + purchasedString); ;
+               localPriceString.PadRight(14) + currencyString.PadRight(6) + purchasedString); ;
             
             Console.WriteLine("--".ToString().PadLeft(3).PadRight(7) + "----".PadRight(10) + "-----".PadRight(18)  +"-----".ToString().PadRight(18) + "------".ToString().PadRight(10)  + "---------".ToString().PadRight(12) +
-               "-----------".ToString().PadRight(15) + "-------------");
+               "-----------".ToString().PadRight(14) + "----".ToString().PadRight(6) + "-------------");
         }
 
 
@@ -757,7 +800,7 @@ namespace AssetTracking2
         {
 
               
-            List<Asset> assets = await AssetRepo.GetAllAssets();
+            List<Asset> assets =  AssetRepo.GetAllAssets();
 
             // List<Asset> sorted = GetSortedAssets(assets, sort);
 
@@ -773,7 +816,7 @@ namespace AssetTracking2
                     string locPrice = Math.Round((double)asset.LocalPrice, 2).ToString();
                  
                     Console.WriteLine(asset.Id.ToString().PadLeft(2).PadRight(7) + asset.Type.PadRight(10) + asset.Brand.PadRight(18) + asset.Model.PadRight(18) + asset.Office.Country.PadRight(10) + asset.PriceInDollar.ToString().PadRight(12) +
-                      locPrice.PadRight(15) + dt);
+                      locPrice.PadRight(14) + asset.Office.Currency.PadRight(6) + dt);
 
                     Console.ResetColor();
                 }
@@ -785,7 +828,7 @@ namespace AssetTracking2
             }
             
             Console.WriteLine();
-            Console.WriteLine("---------------------------------------------------------------------------------");
+            Console.WriteLine("-----------------------------------------------------------------------------------");
         }
 
         //private int GetTimeSpanInDays(DateTime dt)

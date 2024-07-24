@@ -35,24 +35,9 @@ namespace AssetTracking2.Models
 
         public double? LocalPrice { get; set; }
 
-        public int OfficeId { get; set; }
+        public int OfficeId { get; set; }     // Foreign Key
 
         public Office Office { get; set; }     // Nav.property
-
-
-        //public Asset(int id, string type, string? brand, DateTime? purchaseDate, string? model, double? priceInDollar)
-        //{
-        //    Id = id;
-        //    Type = type;
-        //    Brand = brand;
-        //    PurchaseDate = purchaseDate;
-        //    Model = model;
-        //    PriceInDollar = priceInDollar;
-
-        //    //LocalPrice = localPrice;
-
-        //    // Office = office;
-        //}
 
     }
 }

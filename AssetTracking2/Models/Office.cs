@@ -24,7 +24,7 @@ namespace AssetTracking2.Models
         [StringLength(3)]
         public string? Currency { get; set; }
 
-        public ICollection<Asset> Assets { get; set; }   // Nav.property
+        public  ICollection<Asset> Assets { get; set; }   // Nav.property
 
     }
 }
