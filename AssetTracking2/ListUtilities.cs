@@ -849,15 +849,29 @@ namespace AssetTracking2
         }
 
 
-       
-  
         // Gets the Assets from the db and prints them in a list
-        public void PrintAllAssets()
-        {             
-            List<Asset> assets =  AssetRepo.GetAllAssets();          // Get from DB
+        // type = empty string => show all assets, type = "c" show only Computers
+        // type = "P" show only Phones
+        public void PrintAllAssets(string type="")
+        {
+            List<Asset> assets;
+            
+            switch(type)
+            {
+                case "c":
+                    assets = AssetRepo.GetAllComputers();
+                    break;
+                case "p":
+                    assets = AssetRepo.GetAllPhones();
+                    break;
+                default:
+                    assets = AssetRepo.GetAllAssets();
+                    break;
+            }
+            
 
-            //string sort = "";      // Level 2 - DefaultSort
-            string sort = "o";       // Level 3 - OfficeSort
+            string sort = "";      // Level 2 - DefaultSort
+            // string sort = "o";       // Level 3 - OfficeSort
 
             List<Asset> sorted = GetSortedAssets(assets,sort);        
 

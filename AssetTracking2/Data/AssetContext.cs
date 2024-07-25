@@ -12,6 +12,7 @@ namespace AssetTracking2.Data
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+       
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("Data Source=LAPTOP-00V01P49;Initial Catalog=AssetTracking;Integrated Security=True;Connect Timeout=30;Encrypt=False;");

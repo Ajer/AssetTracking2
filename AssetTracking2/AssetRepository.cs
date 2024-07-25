@@ -13,13 +13,35 @@ namespace AssetTracking2
     {
         public List<Asset> GetAllAssets()
         {
+           List<Asset> list;
+           using (var context = new AssetContext())
+           {
+             list = context.Assets.Include(a=>a.Office).AsNoTracking().ToList();  // OBS: AsNoTracking can only be used on reading queries
+           }
+           return list;
+        }
+
+        public List<Asset> GetAllComputers()
+        {
             List<Asset> list;
             using (var context = new AssetContext())
             {
-                list = context.Assets.Include(a=>a.Office).ToList();
+                list = context.Assets.Include(a => a.Office).Where(a => a.Type == "Computer").ToList();  // OBS: AsNoTracking can only be used on reading queries
             }
             return list;
         }
+
+
+        public List<Asset> GetAllPhones()
+        {
+            List<Asset> list;
+            using (var context = new AssetContext())
+            {
+                list = context.Assets.Include(a => a.Office).Where(a => a.Type == "Phone").ToList();  // OBS: AsNoTracking can only be used on reading queries
+            }
+            return list;
+        }
+
 
         public Asset GetAsset(int id)
         {
@@ -153,5 +175,6 @@ namespace AssetTracking2
             return found;
         }
 
+        
     }
 }
