@@ -1,0 +1,15 @@
+
+
+
+Make a DB in SQL Server Management Studio using a .bacpac-file
+-------------------------------------------------------------
+
+1)  Databases -> right-click -> Import Data-tier Application
+
+2) click -> 'next'
+
+3) 'Import Settings' =>  browse to the bacpac-file   or import from Azure  => click 'next'
+
+4)  In 'Database Settings' keep default data file path and log file path. Choose a name for the db => click 'next'
+
+5) 'Summary' =>  Click finish
