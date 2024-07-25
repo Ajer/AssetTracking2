@@ -104,7 +104,7 @@ namespace AssetTracking2
         }
 
 
-        // Lets the user decide if he wants to goahead with the removal of a Asset with a certain id
+        // Lets the user decide if he wants to goahead with the removal of an Asset with a certain id
         // If 'Y/y': goes ahead with removal . if 'A/a' or 'Q/q': the process is aborted  
         private void RemoveAsset(int id)
         {
@@ -128,12 +128,10 @@ namespace AssetTracking2
 
                 try
                 {
-                    // Asset pT = assets.Find(item => item.Id == id);    //get task to remove. We know id exists here from ChangeTask()
+                            
 
-                    // bool ok = tasks.Remove(pT);
+                    bool ok = AssetRepo.DeleteAsset(id);   // Delete Asset. We know id exists here from ChangeAsset().
 
-                    bool ok = AssetRepo.DeleteAsset(id);
-                
                     if (ok)
                     {
               
@@ -164,12 +162,12 @@ namespace AssetTracking2
 
             while (!dataEditParameterOk)
             {
-                dataEditParameter = ReadDataFromUser("Do you want to edit Type 't' , Brand 'b' , Model 'm' , Price ($) 'p', Office 'o'" +
-                    " or DatePurchased 'dp'");
+                dataEditParameter = ReadDataFromUser("Do you want to edit  Brand 'b' , Model 'm' , Price ($) 'p', Office 'o'" +
+                    " or PurchasedDate 'dp'");
                 dataEditParameter = dataEditParameter.ToLower();
 
                 if (dataEditParameter == "dp" || dataEditParameter == "b" || dataEditParameter == "m" || dataEditParameter == "p" ||
-                    dataEditParameter == "o" || dataEditParameter == "t" || dataEditParameter == "q")
+                    dataEditParameter == "o" || dataEditParameter == "q")
                 {
                     dataEditParameterOk = true;
                 }
@@ -183,8 +181,8 @@ namespace AssetTracking2
 
                     Asset a = AssetRepo.GetAsset(id);        // get asset to edit, we know id exists here from ChangeAsset
 
-                    if (dataEditParameter == "t")
-                    {
+                    //if (dataEditParameter == "t")
+                    //{
                         //string typeName = "";
                         //bool typeNameOk = false;
 
@@ -222,12 +220,10 @@ namespace AssetTracking2
                         //bool ok2 = AssetRepo.CreatePhone(p);
 
                         //p.Id = 12;
-                        //bool ok3 = AssetRepo.UpdatePhone(p);
+                        //bool ok3 = AssetRepo.UpdatePhone(p);                                              
+                   // }
 
-                        
-                                                
-                    }
-                    else if (dataEditParameter == "dp")
+                    if (dataEditParameter == "dp")
                     {
                         string dataPurchasedDate = "";
                         bool dateTimeOk = false;
@@ -598,7 +594,7 @@ namespace AssetTracking2
         }
 
 
-        // Start method accessible from program-class for editing / deleting a task
+        // Start method accessible from program-class for editing / deleting an asset
         public void ChangeAsset()
         {
             Console.WriteLine();
@@ -672,13 +668,13 @@ namespace AssetTracking2
                 }
 
                 // here dataEditOrRemove is either "e"  or "x" 
-                if (dataEditOrRemove == "e")   // edit task
+                if (dataEditOrRemove == "e")     // edit asset
                 {
 
                     EditAsset(id);
 
                 }
-                else   // remove task  "x"
+                else     // remove asset  "x"
                 {
                     RemoveAsset(id);
 
@@ -878,7 +874,13 @@ namespace AssetTracking2
                 foreach (var asset in sorted) // Show List
                 {
                     int ts = GetTimeSpanInDays(asset.PurchaseDate);   // ts = Number of days since it was purchased
-                    if (cmpTime - ts <= 91 && (cmpTime - ts >= 0))   // assets betwwen 2 years 9 months and 3 years old will be colored red 
+                    
+                    if (cmpTime - ts <= 183 && (cmpTime - ts >= 0))   // Level3 - assets between 2 years 6 months and 2,9 years old will be colored yellow 
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                    }
+
+                    if (cmpTime - ts <= 91 && (cmpTime - ts >= 0))   // Level2 - assets between 2 years 9 months and 3 years old will be colored red 
                     {
                         Console.ForegroundColor = ConsoleColor.Red;   
                     }
