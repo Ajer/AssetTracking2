@@ -4,8 +4,6 @@ using AssetTracking2;
 
 
 
-
-
 void Main()
 {
     ListUtilities lu = new ListUtilities();
@@ -26,24 +24,22 @@ void Main()
             //{
 
              lu.PrintAllAssets();
+
             //}
         }
         else if (choice.Trim().ToLower() == "2")    // 2 - Add new Asset
         {
             lu.UserChoiceHeader("Add a new Asset");
             lu.AddAsset();
-
         }
         else if (choice.Trim().ToLower() == "3")     // 3 - Edit Asset (update,remove)
         {
             lu.UserChoiceHeader("Edit asset / Remove Asset");
             lu.PrintAllAssets(); 
             lu.ChangeAsset();
-
         }
         else if (choice.Trim().ToLower() == "4")     // 4 - Quit
         {
-
             break;
         }
     }

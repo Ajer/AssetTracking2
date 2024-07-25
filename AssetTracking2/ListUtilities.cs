@@ -21,12 +21,11 @@ namespace AssetTracking2
     public class ListUtilities
     {
 
-        public AssetRepository AssetRepo { get; set; }
+        public AssetRepository AssetRepo { get; set; }    //  Repository holds methods of data-access
 
 
         public ListUtilities()
         {
-
             AssetRepo = new AssetRepository();
         }
 
@@ -363,7 +362,7 @@ namespace AssetTracking2
         }
 
 
-        // Start method accessible from program-class for adding a new task.
+        // Start method accessible from program-class for adding a new asset.
         public void AddAsset()
         {
             ReadAllDataForAddAsset();
@@ -371,7 +370,7 @@ namespace AssetTracking2
 
 
 
-        // Reads user input for an Asset: type,brand,purchasedDate       
+        // Reads user input for an Asset: type,brand,model,price,office and purchasedDate       
         private void ReadAllDataForAddAsset()
         {
 
@@ -382,9 +381,7 @@ namespace AssetTracking2
             string dataPrice = "";
             string dataOfficeCountry = "";
             
-            //string dataOfficeCountry = "";
-
-
+         
             while (true)
             {
                 bool typeOk = false;
@@ -567,31 +564,28 @@ namespace AssetTracking2
 
         // Lets the user input the preferred sorting
         // Returns the string associated with the particular sort: 'd' ,'p' ,'t','s' or 'q' (if user quits)
-        public string UserSortsList()
-        {
-            string dataSort = "";
-            bool dataSortOk = false;
+        //public string UserSortsList()
+        //{
+        //    string dataSort = "";
+        //    bool dataSortOk = false;
 
-            Console.WriteLine();
+        //    Console.WriteLine();
 
-            //Console.WriteLine("Write q to quit");
-            QuitCue();
+        //    QuitCue();
 
-            //Console.WriteLine();
+        //    while (!dataSortOk)
+        //    {
+        //        dataSort = ReadDataFromUser("Write 'd' to sort by Date ,'p' by Project, " +
+        //          "'t' by Tasktitle or 's' by Status");
+        //        dataSort = dataSort.ToLower();
 
-            while (!dataSortOk)
-            {
-                dataSort = ReadDataFromUser("Write 'd' to sort by Date ,'p' by Project, " +
-                  "'t' by Tasktitle or 's' by Status");
-                dataSort = dataSort.ToLower();
-
-                if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "s" || dataSort == "q")
-                {
-                    dataSortOk = true;
-                }
-            }
-            return dataSort;
-        }
+        //        if (dataSort == "d" || dataSort == "p" || dataSort == "t" || dataSort == "s" || dataSort == "q")
+        //        {
+        //            dataSortOk = true;
+        //        }
+        //    }
+        //    return dataSort;
+        //}
 
 
         // Start method accessible from program-class for editing / deleting an asset
@@ -618,7 +612,7 @@ namespace AssetTracking2
                     if (dataId != "q")
                     {
 
-                        bool intOk = int.TryParse(dataId, out id);      // sends out int id if user entered an int
+                        bool intOk = int.TryParse(dataId, out id);      // returns int id if user entered an int
 
                         if (intOk)
                         {
@@ -683,6 +677,7 @@ namespace AssetTracking2
             }
         }
 
+        //
         private double GetLocalPrice(string country_code, double? price)
         {
             if (price != null)
@@ -801,7 +796,8 @@ namespace AssetTracking2
         }
 
 
-        // Writes the headers for the different asset-params
+        // Writes the headers for the Asset-list
+        // Highlights the sort-method used with a quotation-mark '''
         private void ListHeader(string sort="")
         {
             string typeString = "Type";
@@ -842,7 +838,6 @@ namespace AssetTracking2
             {
                 typeString = "Type'";
             }
-
 
 
             Console.WriteLine();
