@@ -75,9 +75,11 @@ namespace AssetTracking2
            
             Console.WriteLine();
             Console.WriteLine("(1) Show Asset List");
-            Console.WriteLine("(2) Add New Asset");
-            Console.WriteLine("(3) Edit Asset (update, remove)");
-            Console.WriteLine("(4) Quit");
+            Console.WriteLine("(2) Show Computers Only List");
+            Console.WriteLine("(3) Show Phones Only List");
+            Console.WriteLine("(4) Add New Asset");
+            Console.WriteLine("(5) Edit Asset (update, remove)");
+            Console.WriteLine("(6) Quit");
 
             Console.ResetColor();
         }
@@ -648,6 +650,7 @@ namespace AssetTracking2
 
                 while (!dataEditOrRemoveOk)
                 {
+                    Console.WriteLine();
                     dataEditOrRemove = ReadDataFromUser("Do you want to Edit 'E' or Remove 'X' the Asset");
                     dataEditOrRemove = dataEditOrRemove.ToLower();
 
@@ -748,7 +751,7 @@ namespace AssetTracking2
 
         private List<Asset> PurchasedDateSort(List<Asset> assets)
         {
-            return assets.OrderBy(item => item.Brand).ThenBy(item => item.PurchaseDate).ToList();
+            return assets.OrderBy(item => item.PurchaseDate).ToList();
         }
 
         private List<Asset> DefaultSort(List<Asset> assets)
@@ -797,7 +800,7 @@ namespace AssetTracking2
 
 
         // Writes the headers for the Asset-list
-        // Highlights the sort-method used with a quotation-mark '''
+        // Highlights the sort-method used with a single-quotation-mark '
         private void ListHeader(string sort="")
         {
             string typeString = "Type";
@@ -855,27 +858,28 @@ namespace AssetTracking2
         public void PrintAllAssets(string type="")
         {
             List<Asset> assets;
-            
+            string sort;         // sort = "":  sort by type,  sort = "o": sort by office 
+
             switch(type)
             {
                 case "c":
                     assets = AssetRepo.GetAllComputers();
+                    sort = "o";
                     break;
                 case "p":
                     assets = AssetRepo.GetAllPhones();
+                    sort = "o";
                     break;
                 default:
                     assets = AssetRepo.GetAllAssets();
-                    break;
-            }
-            
-
-            string sort = "";      // Level 2 - DefaultSort
-            // string sort = "o";       // Level 3 - OfficeSort
+                    //sort = "";        // Level 2 - DefaultSort 
+                    sort = "o";       // Level 3 - "o"=> OfficeSort,
+                    break;                // "b"=> BrandSort, "m"=> ModelSort , "p" => PriceDollarSort                
+            }    
 
             List<Asset> sorted = GetSortedAssets(assets,sort);        
 
-            ListHeader(sort);                                          // show the sort-method by quotation-mark
+            ListHeader(sort);                                          // show the sort-method by single-quotation-mark
 
             int cmpTime = 1096;   // 1096 days approx. 3 years
             if (assets.Any())

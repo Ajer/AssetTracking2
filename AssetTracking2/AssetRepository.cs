@@ -26,7 +26,7 @@ namespace AssetTracking2
             List<Asset> list;
             using (var context = new AssetContext())
             {
-                list = context.Assets.Include(a => a.Office).Where(a => a.Type == "Computer").ToList();  // OBS: AsNoTracking can only be used on reading queries
+                list = context.Assets.Include(a => a.Office).Where(a => a.Type == "Computer").AsNoTracking().ToList();  // OBS: AsNoTracking can only be used on reading queries
             }
             return list;
         }
@@ -37,7 +37,7 @@ namespace AssetTracking2
             List<Asset> list;
             using (var context = new AssetContext())
             {
-                list = context.Assets.Include(a => a.Office).Where(a => a.Type == "Phone").ToList();  // OBS: AsNoTracking can only be used on reading queries
+                list = context.Assets.Include(a => a.Office).Where(a => a.Type == "Phone").AsNoTracking().ToList();  // OBS: AsNoTracking can only be used on reading queries
             }
             return list;
         }

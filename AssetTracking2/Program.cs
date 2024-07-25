@@ -27,18 +27,28 @@ void Main()
 
             //}
         }
-        else if (choice.Trim().ToLower() == "2")    // 2 - Add new Asset
+        else if (choice.Trim().ToLower() == "2")    // 2 - 
+        {
+            lu.UserChoiceHeader("Show List Of Computers Only");
+            lu.PrintAllAssets("c");
+        }
+        else if (choice.Trim().ToLower() == "3")    // 2 - 
+        {
+            lu.UserChoiceHeader("Show List Of Phones Only");
+            lu.PrintAllAssets("p");
+        }
+        else if (choice.Trim().ToLower() == "4")    // 2 - Add new Asset
         {
             lu.UserChoiceHeader("Add a new Asset");
             lu.AddAsset();
         }
-        else if (choice.Trim().ToLower() == "3")     // 3 - Edit Asset (update,remove)
+        else if (choice.Trim().ToLower() == "5")     // 3 - Edit Asset (update,remove)
         {
             lu.UserChoiceHeader("Edit asset / Remove Asset");
             lu.PrintAllAssets(); 
             lu.ChangeAsset();
         }
-        else if (choice.Trim().ToLower() == "4")     // 4 - Quit
+        else if (choice.Trim().ToLower() == "6")     // 4 - Quit
         {
             break;
         }
