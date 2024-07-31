@@ -52,23 +52,9 @@ namespace AssetTracking2
         }
 
 
-        // Writes the Welcome-note when the program starts
-        //public void WriteWelcomeHeader(List<ProjectTask> tasks)
-        //{
-        //    int done = tasks.FindAll(item => item.Status == TaskStatus.Done).Count();  // done
-        //    int notDone = tasks.Count - done;   // "notstarted" and "started"
+        
 
-        //    string nd_tsk = (notDone != 1) ? "tasks" : "task";
-        //    string d_tsk = (done != 1) ? "tasks" : "task";
-
-        //    Console.WriteLine();
-        //    Console.WriteLine("Welcome to Todoly you have " + notDone.ToString() + " " + nd_tsk + " todo and " + done.ToString() + " " + d_tsk+ " are done.");
-        //    Console.WriteLine("Pick an option:");
-
-        //}
-
-
-        // Writes the 4 main choices for the user
+        // Writes the 6 main choices for the user
         public void WriteMenu()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -884,18 +870,23 @@ namespace AssetTracking2
             int cmpTime = 1096;   // 1096 days approx. 3 years
             if (assets.Any())
             {
+                int cntRed = 0;
+                int cntYellow = 0;
+
                 foreach (var asset in sorted) // Show List
                 {
                     int ts = GetTimeSpanInDays(asset.PurchaseDate);   // ts = Number of days since it was purchased
-                    
-                    if (cmpTime - ts <= 183 && (cmpTime - ts >= 0))   // Level3 - assets between 2 years 6 months and 2,9 years old will be colored yellow 
-                    {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                    }
+                                       
 
                     if (cmpTime - ts <= 91 && (cmpTime - ts >= 0))   // Level2 - assets between 2 years 9 months and 3 years old will be colored red 
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;   
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        cntRed++;
+                    }
+                    else if (cmpTime - ts <= 183 && (cmpTime - ts >= 0))   // Level3 - assets between 2 years 6 months and 2,9 years old will be colored yellow 
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        cntYellow++;
                     }
 
                     string dt = asset.PurchaseDate.Value.ToString("yyyy-MM-dd");
@@ -906,6 +897,10 @@ namespace AssetTracking2
 
                     Console.ResetColor();
                 }
+
+                Console.WriteLine();
+                Console.WriteLine("Red: " + cntRed);
+                Console.WriteLine("Yellow: " + cntYellow);
             }
             else
             {
