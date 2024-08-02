@@ -899,8 +899,22 @@ namespace AssetTracking2
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("Red: " + cntRed);
-                Console.WriteLine("Yellow: " + cntYellow);
+               
+                if (cntRed>0)
+                {
+                    string red_assets = (cntRed > 1) ? "assets" : "asset";
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" 3 months or less from end-of-life:  " + cntRed + " " + red_assets);
+                }
+
+                if (cntYellow > 0)
+                {
+                    string yellow_assets = (cntYellow > 1) ? "assets" : "asset";
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(" 6 months or less from end-of-life:  " + cntYellow + " " + yellow_assets);
+                }
+                
+                Console.ResetColor();
             }
             else
             {
