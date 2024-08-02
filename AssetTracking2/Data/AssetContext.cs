@@ -104,6 +104,10 @@ namespace AssetTracking2.Data
             //        City = "Madrid",
             //        Country = "Spain",
             //        CountryCode = "SPA",
+
+
+
+
             //        Currency = "EUR"
             //    }
             //};
